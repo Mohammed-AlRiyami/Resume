@@ -1,10 +1,15 @@
 from pathlib import Path
 import streamlit as st
 from PIL import Image
+from forms.contacts import contact_form
+
+@st.dialog("Contact Me") 
+def show_contact_form():
+    contact_form()
 
 # --- PATH SETTINGS ---
-current_dir = Path(__file__).parent if "__file__" in locals() else Path.cwd()
-css_file = current_dir / "styles" / "main.css"
+current_dir = Path(__file__).resolve().parent.parent if "__file__" in locals() else Path.cwd()
+css_file = current_dir / "styles/main.css"
 resume_file = current_dir / "assets" / "Al-Riyami, Mohammed Resume.pdf"
 profile_pic = current_dir / "assets" / "headshot.png"
 
@@ -35,12 +40,12 @@ profile_pic = Image.open(profile_pic)
 
 
 # --- HERO SECTION ---
-col1, col2 = st.columns(2, gap="small")
+col1, col2 = st.columns(2, gap="small", vertical_alignment="center")
 with col1:
     st.image(profile_pic, width = 240)
 
 with col2:
-    st.title(NAME)
+    st.title(NAME, anchor=False)
     st.write(DESCRIPTION)
     st.download_button(
         label = "📃 Download Resume",
@@ -48,8 +53,10 @@ with col2:
         file_name = resume_file.name,
         mime = "application/octet-stream"
     )
-    st.write("📫",EMAIL)
+    # st.write("📫",EMAIL)
     
+    if st.button("📨 Contact Me"):
+        show_contact_form()
 
 # --- SOCIAL LINKS ---
 st.write("#")
